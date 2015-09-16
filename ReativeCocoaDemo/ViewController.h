@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RACProtocolTest <NSObject>
+
+- (void)makeApp;
+
+@end
+
 @interface ViewController : UIViewController
 
 

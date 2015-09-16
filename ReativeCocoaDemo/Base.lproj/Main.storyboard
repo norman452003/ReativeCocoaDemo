@@ -1,13 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GAg-5b-WsP">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="VKh-gN-HV3">
+            <objects>
+                <navigationController id="GAg-5b-WsP" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FD6-8M-3Dh">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="4B7-f8-I7G" kind="relationship" relationship="rootViewController" id="6HZ-2c-MDA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mqi-B0-7tN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1335" y="124"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="b2A-k3-WYf">
+            <objects>
+                <viewController id="4B7-f8-I7G" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XEQ-jO-cN6"/>
+                        <viewControllerLayoutGuide type="bottom" id="Yau-6Y-0BI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="iyS-rS-EAX">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="zwp-oQ-f1P">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="HiJ-Pg-txR">
+                            <connections>
+                                <segue destination="BYZ-38-t0r" kind="show" id="EtV-o0-b80"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5uq-Af-sJq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-649" y="168"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +56,65 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入账号" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hZ9-Qa-jpM">
+                                <rect key="frame" x="201" y="135" width="200" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="7Ch-ux-EhM"/>
+                                    <constraint firstAttribute="height" constant="31" id="WIH-Uq-jtl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eDd-mr-YHT">
+                                <rect key="frame" x="201" y="195" width="200" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="gpf-Zt-gey"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XMN-uc-qdt">
+                                <rect key="frame" x="200" y="91" width="200" height="20.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="hxS-QO-WNN"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0S-gI-DZy">
+                                <rect key="frame" x="285" y="279" width="30" height="30"/>
+                                <state key="normal" title="text">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="XMN-uc-qdt" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="27" id="35k-mh-wed"/>
+                            <constraint firstAttribute="centerX" secondItem="hZ9-Qa-jpM" secondAttribute="centerX" constant="-0.5" id="4XL-p9-BcX"/>
+                            <constraint firstAttribute="centerY" secondItem="hZ9-Qa-jpM" secondAttribute="centerY" constant="150" id="5MP-Dj-VHS"/>
+                            <constraint firstItem="hZ9-Qa-jpM" firstAttribute="top" secondItem="XMN-uc-qdt" secondAttribute="bottom" constant="23" id="BEK-cd-TzG"/>
+                            <constraint firstAttribute="centerX" secondItem="XMN-uc-qdt" secondAttribute="centerX" id="HbO-hy-o3z"/>
+                            <constraint firstItem="eDd-mr-YHT" firstAttribute="leading" secondItem="hZ9-Qa-jpM" secondAttribute="leading" id="Nut-iP-6WR"/>
+                            <constraint firstItem="eDd-mr-YHT" firstAttribute="height" secondItem="hZ9-Qa-jpM" secondAttribute="height" id="War-5H-oNs"/>
+                            <constraint firstItem="eDd-mr-YHT" firstAttribute="width" secondItem="hZ9-Qa-jpM" secondAttribute="width" id="o6g-im-9zy"/>
+                            <constraint firstAttribute="centerX" secondItem="Q0S-gI-DZy" secondAttribute="centerX" id="pUv-nf-uha"/>
+                            <constraint firstItem="Q0S-gI-DZy" firstAttribute="top" secondItem="eDd-mr-YHT" secondAttribute="bottom" constant="54" id="wRt-Jp-CSF"/>
+                            <constraint firstItem="eDd-mr-YHT" firstAttribute="top" secondItem="hZ9-Qa-jpM" secondAttribute="bottom" constant="30" id="zT0-nA-B0k"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="accounttTextFiled" destination="hZ9-Qa-jpM" id="U1m-22-hen"/>
+                        <outlet property="label" destination="XMN-uc-qdt" id="JVX-r2-qkH"/>
+                        <outlet property="pwdTextField" destination="eDd-mr-YHT" id="1gB-T4-jYn"/>
+                        <outlet property="textBtn" destination="Q0S-gI-DZy" id="g3y-8S-fPA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="65" y="168"/>
         </scene>
     </scenes>
 </document>
