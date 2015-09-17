@@ -9,14 +9,16 @@
 #import "ViewController.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <RACEXTScope.h>
+#import "SignInService.h"
+#import "MainViewController.h"
 @interface ViewController ()<RACProtocolTest>
 
 @property (weak, nonatomic) IBOutlet UITextField *accounttTextFiled;
 @property (weak, nonatomic) IBOutlet UITextField *pwdTextField;
-@property (nonatomic,copy) NSString *name;
 @property (weak, nonatomic) IBOutlet UIButton *textBtn;
 @property (weak, nonatomic) IBOutlet UILabel *label;
-@property (nonatomic,copy) NSString *name1;
+@property (copy,nonatomic) NSString *name;
+@property (nonatomic,strong) SignInService *signService;
 
 @end
 
@@ -25,105 +27,136 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self labelDemo];
+    [self btnEnabledDemo];
+    [self delegateDemo];
+    [self notificationDemo];
+    [self KVODemo];
+    [self textFieldDemo];
+    [self btnDemo];
+}
+
+/**
+ *  label文字跟着textFiled动
+ */
+- (void)labelDemo{
+    RAC(self.label,text) = self.accounttTextFiled.rac_textSignal;
+}
+
+/**
+ *  RAC按钮的enabled在2个文本框都有文字的时候才能点击
+ */
+- (void)btnEnabledDemo{
+    
     __weak typeof(self) weakSelf = self;
-//    [self.textFiled.rac_textSignal subscribeNext:^(NSString *text) {
-//        weakSelf.textBtn.enabled = text.length > 0;
-//    }];
-    
-//   [self.textFiled.rac_textSignal subscribeNext:^(NSString *text) {
-//       NSLog(@"%tu",text.length);
-//   }];
-//    [[self.textFiled.rac_textSignal filter:^BOOL(NSString *value) {
-//        NSString *text = value;
-//        return text.length > 3;
-//    }]
-//    subscribeNext:^(NSString *text) {
-//        
-//    }];
-    RACSignal *textFieldSignal = self.accounttTextFiled.rac_textSignal;
-    RACSignal *filterUserName = [textFieldSignal filter:^BOOL(NSString *value) {
-        return value.length > 3;
+
+    RACSignal *accountTextSignal = [self.accounttTextFiled.rac_textSignal map:^id(NSString *text) {
+        return @(weakSelf.accounttTextFiled.text.length > 0);
     }];
-//    [filterUserName subscribeNext:^(NSString *text) {
-//        NSLog(@"%@",text);
-//    }];
-//    [[self.textFiled.rac_textSignal filter:^BOOL(NSString *text) {
-//        return text.length > 3;
-//    }] subscribeNext:^(id x) {
-//        NSLog(@"%@",x);
-//    }];
     
-//    __weak typeof(self) weakSelf = self;
-//    [[self.textFiled.rac_textSignal map:^id(NSString *text) {
-//        return @(text.length > 3);
-//    }]  subscribeNext:^(NSNumber *value) {
-//        weakSelf.textFiled.backgroundColor = value.boolValue ? [UIColor grayColor] : [UIColor blueColor];
-//    }];
-//  
-//    [RACObserve(self, name) subscribeNext: ^(NSString *newName){
-//        NSLog(@"newName:%@", newName);
-//    }];
+    RACSignal *pwdTextSignal = [self.pwdTextField.rac_textSignal map:^id(id value) {
+        return @(weakSelf.pwdTextField.text.length > 0);
+    }];
     
-//    RAC(self.textBtn,enabled) = [RACSignal combineLatest:@[self.accounttTextFiled.rac_textSignal,self.pwdTextField.rac_textSignal] reduce:^(NSString *accountText,NSString *pwdText){
-//        return nil;
-//        }];
+    RACSignal *combineSignal = [RACSignal combineLatest:@[accountTextSignal,pwdTextSignal] reduce:^id(NSNumber *accountTextSignal,NSNumber *pwdTextSignal){
+        return @(accountTextSignal.boolValue && pwdTextSignal.boolValue);
+    }];
     
-//    RAC(self.label,text) = RACObserve(self, name);
-//    [RACObserve(self, name) subscribeNext:^(NSString *name) {
-//        weakSelf.label.text = name;
-//    }];
-//    RAC(self.label,text) = [[[self.accounttTextFiled.rac_textSignal startWith:@"请输入3~10个字符"] filter:^BOOL(NSString *text) {
-//        return text.length > 3;
-//    }] map:^id(id value) {
-//        return [value isEqualToString:@"norman"] ? @"right" : @"false";
-//    }];
-    
-//    [[self.accounttTextFiled.rac_textSignal filter:^BOOL(NSString *text) {
-//        return [text hasPrefix:@"123"];
-//    }] subscribeNext:^(NSString *text) {
-//        NSLog(@"%@",text);
-//    }];
-//    [self.accounttTextFiled.rac_textSignal subscribeNext:^(NSString *text) {
-//        weakSelf.textBtn.enabled = text.length;
-//    }];
-    
-    //代理
+    [combineSignal subscribeNext:^(NSNumber *combineSignal) {
+        weakSelf.textBtn.enabled = combineSignal.boolValue;
+    }];
+}
+
+/**
+ *  通知RACDemo
+ */
+- (void)notificationDemo{
+    [[[NSNotificationCenter defaultCenter] rac_addObserverForName:@"NotificationTest" object:nil] subscribeNext:^(NSNotification *note) {
+        NSLog(@"看下能收到不 %@",note);
+    }];
+}
+
+/**
+ *  代理RACDemo
+ */
+- (void)delegateDemo{
     RACSignal *programmerSignal = [self rac_signalForSelector:@selector(makeApp) fromProtocol:@protocol(RACProtocolTest)];
     [programmerSignal subscribeNext:^(id x) {
         NSLog(@"执行代理方法");
     }];
-    //通知
-    [[[NSNotificationCenter defaultCenter] rac_addObserverForName:@"NotificationTest" object:nil] subscribeNext:^(NSNotification *note) {
-        NSLog(@"看下能收到不 %@",note);
-    }];
-
-    RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [subscriber sendNext:@"第一步"];
-        [subscriber sendCompleted];
-        return nil;
-    }];
-    
-    RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [subscriber sendNext:@"第二步"];
-        [subscriber sendCompleted];
-        return nil;
-    }];
-    
-//    [[signalA concat:signalB] subscribeNext:^(id x) {
-//        NSLog(@"%@",x);
-//    }];
-    [[RACSignal merge:@[signalB,signalB,signalA,signalA]] subscribeNext:^(id x) {
-        NSLog(@"%@",x);
-    }];
-    
 }
 
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"NotificationTest" object:@"传递"];
-//}
+/**
+ *  KVORACDemo
+ */
+- (void)KVODemo{
+    __weak typeof(self) weakSelf = self;
+    [RACObserve(self, name) subscribeNext:^(NSString *name) {
+        weakSelf.label.text = name;
+    }];
+}
+
+/**
+ *  textFieldRACDemo
+ */
+- (void)textFieldDemo{
+    __weak typeof(self) weakSelf = self;
+    [[self.pwdTextField.rac_textSignal map:^id(NSString *text) {
+        return @(text.length > 6);
+    }] subscribeNext:^(NSNumber *normal) {
+        weakSelf.pwdTextField.backgroundColor = normal.boolValue ? [UIColor whiteColor] : [UIColor lightGrayColor];
+    }];
+}
+
+/**
+ *  按钮点击事件
+ */
+- (void)btnDemo{
+    [[[self.textBtn rac_signalForControlEvents:UIControlEventTouchUpInside] flattenMap:^RACStream *(id value) {
+        return [self signInSignal];
+    }] subscribeNext:^(NSNumber *success) {
+        if (success.boolValue == NO){
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"输入的账号或者密码有误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+            return;
+        }
+        MainViewController *mainVC = [[MainViewController alloc] init];
+        mainVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        UINavigationController *naivVC = [[UINavigationController alloc] initWithRootViewController:mainVC];
+        [self presentViewController:naivVC animated:YES completion:nil];
+    }];
+}
+
+/**
+ *  创建登陆信号
+ *
+ */
+- (RACSignal *)signInSignal{
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+       [self.signService signInWithAccount:self.accounttTextFiled.text password:self.pwdTextField.text completed:^(BOOL success) {
+           [subscriber sendNext:@(success)];
+           [subscriber sendCompleted];
+       }];
+        return nil;
+    }];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NotificationTest" object:@(NO)];
+    static NSInteger index = 0;
+    self.name = [NSString stringWithFormat:@"%tu",++index];
+}
 
 - (void)dealloc{
     NSLog(@"dealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (SignInService *)signService{
+    if (_signService == nil){
+        _signService = [[SignInService alloc] init];
+    }
+    return _signService;
 }
 
 @end
